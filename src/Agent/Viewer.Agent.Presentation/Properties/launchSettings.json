@@ -1,18 +1,9 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Viewer.Agent.Presentation.Agent1": {
+    "Viewer.Agent.Presentation.Agent": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "commandLineArgs": "--config=appsettings.agent1.json",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
-      }
-    },
-    "Viewer.Agent.Presentation.Agent2": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "commandLineArgs": "--config=appsettings.agent2.json",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }

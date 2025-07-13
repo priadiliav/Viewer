@@ -13,6 +13,14 @@ using Viewer.Server.Presentation.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 builder.Services.AddGrpc();
@@ -65,6 +73,6 @@ app.MapConfigurationEndpoints();
 app.MapPolicyEndpoints();
 app.MapProcessEndpoints();
 app.MapHeartbeatEndpoints();
-
+app.UseCors("AllowAllOrigins");
 app.Run();
 
