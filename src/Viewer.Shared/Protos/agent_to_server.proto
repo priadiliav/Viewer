@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package communication.agent_to_server;
+
+import "google/protobuf/timestamp.proto";
+
+message AgentToServerMessage {
+  google.protobuf.Timestamp timestamp = 1;
+  oneof payload {
+    Heartbeat heartbeat = 2;
+  }
+}
+
+message Heartbeat {
+}

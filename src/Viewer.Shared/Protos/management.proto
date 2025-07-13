@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package communication.management;
+
+import "configuration.proto";
+
+service ManagementService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+// todo: to be expanded
+message LoginRequest {
+  string agent_id = 1;
+  string agent_secret = 2;
+}
+
+message LoginResponse {
+  string Token = 1;
+  communication.common.Configuration configuration = 2;
+}

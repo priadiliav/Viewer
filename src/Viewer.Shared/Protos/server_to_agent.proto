@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package communication.server_to_agent;
+
+import "google/protobuf/timestamp.proto";
+import "configuration.proto";
+
+message ServerToAgentMessage {
+  google.protobuf.Timestamp timestamp = 1;
+  oneof payload {
+    communication.common.Configuration configuration = 2;
+  }
+}

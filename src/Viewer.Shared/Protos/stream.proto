@@ -1,0 +1,9 @@
+syntax = "proto3";
+import "agent_to_server.proto";
+import "server_to_agent.proto";
+
+package communication;
+
+service StreamService {
+  rpc Communicate (stream communication.agent_to_server.AgentToServerMessage) returns (stream communication.server_to_agent.ServerToAgentMessage);
+}

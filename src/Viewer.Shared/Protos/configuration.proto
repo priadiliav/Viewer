@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package communication.common;
+
+import "google/protobuf/timestamp.proto";
+
+message Configuration {
+  string name = 1;
+  repeated Policy policies = 2;
+  repeated Process processes = 3;
+}
+
+enum RegistryKeyType {
+  Hklm = 0;
+  Hkcu = 1;
+  Hkcr = 2;
+  Hkus = 3;
+}
+
+enum RegistryValueType {
+  String = 0;
+  Binary = 1;
+  Dword = 2;
+  Qword = 3;
+}
+
+message Policy {
+  string name = 1;
+  string registry_path = 2;
+
+  RegistryKeyType registry_key_type = 3;
+  string registry_key = 4;
+
+  // todo: rename to registry_value_kind
+  RegistryValueType registry_value_type = 5;
+  string registry_value = 6;
+}
+
+enum ProcessStatus {
+  Active = 0;
+  Banned = 1;
+}
+
+message Process {
+  string name = 1;
+  ProcessStatus status = 2;
+}
