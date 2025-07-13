@@ -1,0 +1,34 @@
+name: Build and Publish Viewer.Agent
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🛠️ Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: 📦 Restore dependencies
+        run: dotnet restore src/Agent/Viewer.Agent.Presentation/Viewer.Agent.Presentation.csproj
+
+      - name: 🔧 Build project
+        run: dotnet build src/Agent/Viewer.Agent.Presentation/Viewer.Agent.Presentation.csproj --configuration Release
+
+      - name: 🚀 Publish as self-contained executable
+        run: dotnet publish src/Agent/Viewer.Agent.Presentation/Viewer.Agent.Presentation.csproj -c Release -r win-x64 --self-contained true -o publish
+
+      - name: 📁 Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ViewerAgent-win-x64
+          path: publish/

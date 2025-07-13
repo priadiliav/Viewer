@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Viewer.Agent.Domain.Configs;
+using Viewer.Agent.Infrastructure.Grpc.Handlers;
 using Viewer.Agent.Infrastructure.Grpc.Utils;
 using AuthContext = Viewer.Agent.Domain.Configs.AuthContext;
 
@@ -19,10 +20,11 @@ public interface IStreamManagerClient
 }
 
 public class GrpcStreamManagerClient(
-		ILogger<GrpcStreamManagerClient> logger,
-		IOptions<AgentConfig> agentConfig,
-		AuthContext authContext,
-		Communication.StreamService.StreamServiceClient streamServiceClient) : IStreamManagerClient
+	ILogger<GrpcStreamManagerClient> logger,
+	IOptions<AgentConfig> agentConfig,
+	AuthContext authContext,
+	IMessageHandlerFactory messageHandlerFactory,
+	Communication.StreamService.StreamServiceClient streamServiceClient) : IStreamManagerClient
 {
 	private AsyncDuplexStreamingCall<AgentToServerMessage, ServerToAgentMessage>? _call;
 	private readonly SemaphoreSlim _streamLock = new(1, 1);
@@ -113,6 +115,7 @@ public class GrpcStreamManagerClient(
 	/// </summary>
 	/// <param name="ex"></param>
 	/// <returns></returns>
+	/// todo: separate exceptions statuses by needs to shut down or retry
 	private bool IsTransientGrpcError(RpcException ex)
 	{
 		return ex.StatusCode switch
@@ -143,7 +146,8 @@ public class GrpcStreamManagerClient(
 			while (await _call.ResponseStream.MoveNext(cancellationToken))
 			{
 				var message = _call.ResponseStream.Current;
-				logger.LogInformation("Received message: {MessageType}", message.GetType().Name);
+				
+				await messageHandlerFactory.HandleAsync(message);
 			}
 		}
 		catch (RpcException ex) when (ex.StatusCode == StatusCode.Cancelled && cancellationToken.IsCancellationRequested)

@@ -1,4 +1,4 @@
-namespace Viewer.Server.Domain;
+namespace Viewer.Server.Domain.Interfaces;
 
 public interface ITrackable
 {

@@ -12,6 +12,7 @@ public class Worker(
 		IManagementServiceClient managementServiceClient,
 		IStreamManagerClient streamManagerClient,
 		IHeartbeatService heartbeatService,
+		IProcessService processService,
 		ILogger<Worker> logger) : BackgroundService
 {
 	private readonly AgentConfig _agentConfig = agentConfigOptions.Value;
@@ -51,9 +52,19 @@ public class Worker(
 			var produceHeartbeatsAsync = heartbeatService.ProduceHeartbeatsAsync(stoppingToken);
 			logger.LogInformation("Heartbeat producing started successfully");
 
+			logger.LogInformation("Starting process watchers...");
+			var processStartWatcherTask = processService.StartProcessWatcherAsync(stoppingToken);
+			var processStopWatcherTask = processService.StopProcessWatcherAsync(stoppingToken);
+			logger.LogInformation("Process watchers started successfully");
+			
 			await Task.WhenAll(
+					// Periodic producers
 					produceHeartbeatsAsync,
-					handleMessagesAsync);
+					// Handlers
+					handleMessagesAsync,
+					// Watchers
+					processStartWatcherTask,
+					processStopWatcherTask);
 		}
 		catch (OperationCanceledException)
 		{

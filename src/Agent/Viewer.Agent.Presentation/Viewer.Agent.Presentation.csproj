@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>dotnet-Viewer.Agent.Presentation-4c270668-5eb9-4226-a2af-728487ae1053</UserSecretsId>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
     
 

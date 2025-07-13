@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Viewer.Server.Domain;
+using Viewer.Server.Domain.Interfaces;
 using Viewer.Server.Domain.Models;
 
 namespace Viewer.Server.Infrastructure.Configs;

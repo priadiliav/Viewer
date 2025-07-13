@@ -1,3 +1,5 @@
+using Viewer.Server.Domain.Interfaces;
+
 namespace Viewer.Server.Domain.Models;
 
 

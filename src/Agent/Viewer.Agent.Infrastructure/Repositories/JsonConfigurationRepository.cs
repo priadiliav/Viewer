@@ -7,8 +7,8 @@ using Viewer.Agent.Domain.Models;
 
 namespace Viewer.Agent.Infrastructure.Repositories;
 
-public partial class JsonConfigurationRepository(
-		ILogger<JsonConfigurationRepository> logger,
+public class JsonConfigurationRepository(
+		ILogger<JsonConfigurationRepository> logger, 
 		IOptions<RepositoryConfig> repoConfig) : IConfigurationRepository
 {
 	private readonly string _filePath = repoConfig.Value.GetFullPath();
@@ -28,8 +28,6 @@ public partial class JsonConfigurationRepository(
 
 				var json = File.ReadAllText(_filePath);
 
-				var desirializatedObject = JsonSerializer.Deserialize<Configuration>(json);
-				
 				return JsonSerializer.Deserialize<Configuration>(json);
 			}
 			catch (Exception ex)

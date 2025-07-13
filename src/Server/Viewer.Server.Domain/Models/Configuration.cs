@@ -1,8 +1,10 @@
+using Viewer.Server.Domain.Interfaces;
+
 namespace Viewer.Server.Domain.Models;
 
 public class Configuration : ITrackable
 {
-	public long Id { get; set; }
+	public long Id { get; init; }
 	public string Name { get; set; } = string.Empty;
 	
 	public DateTimeOffset? CreatedAt { get; set; }

@@ -6,8 +6,4 @@ public interface IConfigurationRepository
 {
 	Configuration? GetConfiguration();
 	void SaveConfiguration(Configuration configuration);
-	
-	List<Process> GetProcesses();
-	List<Process> GetProcessesByStatus(ProcessStatus status);
-	List<Policy> GetPolicies();
 }
