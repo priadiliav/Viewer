@@ -12,19 +12,7 @@ using Viewer.Agent.Infrastructure.Grpc.Services;
 using Viewer.Agent.Infrastructure.Repositories;
 using Viewer.Agent.Presentation;
 
-var configFile = args.FirstOrDefault(a => a.StartsWith("--config="))?.Split("=")[1]
-                 ?? "appsettings.json";
-
-var configuration = new ConfigurationManager();
-
-configuration.AddJsonFile(configFile, optional: false, reloadOnChange: true);
-
-var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
-{
-		Args = args,
-		Configuration = configuration
-});
-
+var builder = Host.CreateApplicationBuilder(args);
 builder.Services.Configure<ConnectionConfig>(builder.Configuration.GetSection("ConnectionConfig"));
 builder.Services.Configure<AgentConfig>(builder.Configuration.GetSection("AgentConfig"));
 builder.Services.Configure<RepositoryConfig>(builder.Configuration.GetSection("RepositoryConfig"));
@@ -66,8 +54,6 @@ builder.Services.AddSingleton<IStreamManagerClient, GrpcStreamManagerClient>();
 builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddSingleton<AuthContext>();
-
-
 
 var host = builder.Build();
 host.Run();
