@@ -15,6 +15,8 @@ public interface IConfigurationService
 	Task<ConfigurationDetailsDto?> GetByIdAsync(long id);
 	Task<ConfigurationDetailsDto?> CreateAsync(ConfigurationCreateRequest createRequest);
 	Task<ConfigurationDetailsDto> UpdateAsync(long id, ConfigurationUpdateRequest updateRequest);
+    Task DeleteAsync(long id);
+    Task ApplyConfiguration(long id);
 }
 
 public class ConfigurationService(
@@ -54,33 +56,55 @@ public class ConfigurationService(
 		
 		var updatedConfigurationDomain = updateRequest.ToDomain(id);
 		existingConfiguration.UpdateFrom(updatedConfigurationDomain);
-		
+        existingConfiguration.ResetAppliedStatus();        
+        
 		await unitOfWork.Configurations.UpdateAsync(existingConfiguration);
 		await unitOfWork.SaveChangesAsync();
 
 		var updatedConfigurationEntity = await unitOfWork.Configurations.GetByIdAsync(id);
 		if (updatedConfigurationEntity is null)
 			throw new Exception($"Configuration {id} not found after update");
-		
-		// fire and forget to apply configuration to agents, becuase it can take time
-		// in feature use something like kafka broker, where it will be guaranteed that all messages will be processed
-		var agentIds = updatedConfigurationEntity.Agents.Select(x => x.Id);
-		_ = ApplyConfigurationToAgentsAsync(agentIds, updatedConfigurationEntity);
-		
+        
 		return updatedConfigurationEntity.ToDetailsDto();
 	}
 
-	private async Task ApplyConfigurationToAgentAsync(Guid agentId, Configuration configuration)
+    public async Task DeleteAsync(long id)
+    {
+        var configuration = await unitOfWork.Configurations.GetByIdAsync(id);
+        if (configuration is null)
+            throw new Exception($"Configuration {id} not found");
+
+        if (configuration.Agents.Any())
+            throw new Exception($"Configuration {id} cannot be deleted because it is assigned to agents");
+        
+        await unitOfWork.Configurations.DeleteAsync(configuration);
+        await unitOfWork.SaveChangesAsync();
+    }
+    
+
+    private async Task ApplyConfigurationToAgentAsync(Guid agentId, Configuration configuration)
 	{
-		if (!streamManager.IsAgentConnected(agentId))
-			logger.LogWarning($"Agent {agentId} is not connected, skipping configuration application");
-		
-		await configurationProducer.ProduceAsync(agentId, configuration);
+        if (!streamManager.IsAgentConnected(agentId))
+        {
+            logger.LogWarning($"Agent {agentId} is not connected, skipping configuration application");
+            return;
+        }
+
+        await configurationProducer.ProduceAsync(agentId, configuration);
 	}
 	
-	private async Task ApplyConfigurationToAgentsAsync(IEnumerable<Guid> agentIds, Configuration configuration)
+	public async Task ApplyConfiguration(long configurationId)
 	{
+        var configuration = await unitOfWork.Configurations.GetByIdAsync(configurationId);
+        if (configuration is null)
+            throw new Exception($"Configuration {configurationId} not found");
+        
+        var agentIds = configuration.Agents.Select(x => x.Id);
 		var tasks = agentIds.Select(agentId => ApplyConfigurationToAgentAsync(agentId, configuration));
-		await Task.WhenAll(tasks);
+        await Task.WhenAll(tasks);
+        
+        configuration.MarkAsApplied();
+        await unitOfWork.Configurations.UpdateAsync(configuration);
+        await unitOfWork.SaveChangesAsync();
 	}
 }

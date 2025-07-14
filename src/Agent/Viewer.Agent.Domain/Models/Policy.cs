@@ -2,10 +2,10 @@ namespace Viewer.Agent.Domain.Models;
 
 public enum RegistryKeyType
 {
-	Hkcr,
-	Hkcu,
-	Hklm,
-	Hkus
+    Hklm, // HKEY_LOCAL_MACHINE
+    Hkcu, // HKEY_CURRENT_USER
+    Hkcr, // HKEY_CLASSES_ROOT
+    Hkus, // HKEY_USERS
 }
 
 public enum RegistryValueKind
@@ -15,6 +15,7 @@ public enum RegistryValueKind
 	DWord,
 	QWord
 }
+
 public class Policy
 {
 	public string Name { get; set; } = string.Empty;

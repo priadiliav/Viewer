@@ -25,7 +25,6 @@ public class AgentService(
 	public async Task<IEnumerable<AgentDto>> GetAllAsync()
 	{
 		var agentsDomain = await unitOfWork.Agents.GetAllAsync();
-		
 		return agentsDomain.Select(x =>
 		{
 			var isAgentConnected = streamManager.IsAgentConnected(x.Id);
@@ -43,8 +42,17 @@ public class AgentService(
 	public async Task<AgentDetailsDto?> CreateAsync(AgentCreateRequest createRequest)
 	{
 		var agentDomain = createRequest.ToDomain();
+        
+        var configurationDomain = await unitOfWork.Configurations.GetByIdAsync(agentDomain.ConfigurationId);
+        if (configurationDomain is null)
+            throw new ArgumentException($"Configuration with ID {agentDomain.ConfigurationId} does not exist.", nameof(agentDomain.ConfigurationId));
+        
+        configurationDomain.ResetAppliedStatus();
+        
 		await unitOfWork.Agents.CreateAsync(agentDomain);
 		await unitOfWork.SaveChangesAsync();
+        
+        
 		return await GetByIdAsync(agentDomain.Id);
 	}
 
@@ -56,6 +64,12 @@ public class AgentService(
         
         var updatedAgentDomain = updateRequest.ToDomain(id);
         existingAgent.UpdateFrom(updatedAgentDomain);
+        
+        var configurationDomain = await unitOfWork.Configurations.GetByIdAsync(existingAgent.ConfigurationId);
+        if (configurationDomain is null)
+            throw new ArgumentException($"Configuration with ID {existingAgent.ConfigurationId} does not exist.", nameof(existingAgent.ConfigurationId));
+        
+        configurationDomain.ResetAppliedStatus();
         
         await unitOfWork.Agents.UpdateAsync(existingAgent);
         await unitOfWork.SaveChangesAsync();

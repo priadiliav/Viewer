@@ -18,4 +18,20 @@ public class Process : ITrackable
 	public DateTimeOffset? UpdatedAt { get; set; }
 	
 	public virtual ICollection<ProcessInConfiguration> Configurations { get; set; } = new List<ProcessInConfiguration>();
+    
+    public void UpdateFrom(Process process)
+    {
+        if (process == null) 
+            throw new ArgumentNullException(nameof(process));
+
+        Name = process.Name;
+        Status = process.Status;
+
+        // Clear existing configurations and add new ones
+        Configurations.Clear();
+        foreach (var config in process.Configurations)
+        {
+            Configurations.Add(config);
+        }
+    }
 }

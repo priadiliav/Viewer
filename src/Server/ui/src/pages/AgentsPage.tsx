@@ -9,7 +9,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-interface Agent {
+export interface Agent {
   id: string;
   name: string;
   isConnected: boolean;
@@ -112,7 +112,6 @@ export default function AgentsPage() {
   };
 
   const openCreateModal = () => {
-    fetchConfigurations();
     setFormAgent({ name: '', configurationId: '' });
     setEditMode(false);
     setModalOpen(true);

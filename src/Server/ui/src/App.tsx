@@ -12,6 +12,9 @@ const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
   },
+  typography: {
+    htmlFontSize: 18.4,  // якщо дефолт 16, 16 * 0.9 = 14.4
+  },
   colorSchemes: { light: true, dark: true },
   breakpoints: {
     values: {

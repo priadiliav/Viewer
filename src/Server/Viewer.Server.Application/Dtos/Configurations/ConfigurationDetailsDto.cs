@@ -8,6 +8,7 @@ public class ConfigurationDetailsDto
 {
 	public long Id { get; set; }
 	public string Name { get; set; } = string.Empty;
+    public bool IsApplied { get; set; } = false;
 	public List<AgentDto> Agents { get; set; } = new();
 	public List<PolicyDto> Policies { get; set; } = new();
 	public List<ProcessDto> Processes { get; set; } = new();

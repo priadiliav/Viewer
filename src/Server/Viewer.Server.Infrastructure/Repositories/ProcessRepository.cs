@@ -19,12 +19,11 @@ public class ProcessRepository(AppDbContext context) : IProcessRepository
 		return Task.CompletedTask;
 	}
 
-	public async Task DeleteAsync(long id)
+	public Task DeleteAsync(Process process)
 	{
-		var proces = await context.Proceses.FindAsync(id);
-		if (proces is not null)
-			context.Proceses.Remove(proces);
-	}
+        context.Proceses.Remove(process);
+        return Task.CompletedTask;
+    }
 
 	public async Task<IEnumerable<Process>> GetAllAsync() =>
 			await context.Proceses.ToListAsync();

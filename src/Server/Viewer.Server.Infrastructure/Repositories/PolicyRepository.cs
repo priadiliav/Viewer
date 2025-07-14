@@ -19,12 +19,11 @@ public class PolicyRepository(AppDbContext context) : IPolicyRepository
 		return Task.CompletedTask;
 	}
 
-	public async Task DeleteAsync(long id)
-	{
-		var policy = await context.Policies.FindAsync(id);
-		if (policy is not null)
-			context.Policies.Remove(policy);
-	}
+    public Task DeleteAsync(Policy policy)
+    {
+        context.Policies.Remove(policy);
+        return Task.CompletedTask;
+    }
 
 	public async Task<IEnumerable<Policy>> GetAllAsync() =>
 		await context.Policies.ToListAsync();

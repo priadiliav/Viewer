@@ -6,6 +6,7 @@ public class Configuration : ITrackable
 {
 	public long Id { get; init; }
 	public string Name { get; set; } = string.Empty;
+    public bool IsApplied { get; set; } = false;
 	
 	public DateTimeOffset? CreatedAt { get; set; }
 	public DateTimeOffset? UpdatedAt { get; set; }
@@ -20,12 +21,6 @@ public class Configuration : ITrackable
 			throw new ArgumentNullException(nameof(configuration));
 
 		Name = configuration.Name;
-		
-		Agents.Clear();
-		foreach (var agent in configuration.Agents)
-		{
-			Agents.Add(agent);
-		}
 
 		Policies.Clear();
 		foreach (var policy in configuration.Policies)
@@ -39,4 +34,14 @@ public class Configuration : ITrackable
 			Processes.Add(process);
 		}
 	}
+
+    public void ResetAppliedStatus()
+    {
+        IsApplied = false;
+    }
+    
+    public void MarkAsApplied()
+    {
+        IsApplied = true;
+    }
 }

@@ -5,7 +5,7 @@ namespace Viewer.Server.Presentation.Endpoints;
 
 public static class HeartbeatEndpoints 
 {
-	public static async Task<IEnumerable<HeartbeatDto>> GetHeartbeats(IHeartbeatService heartbeatService)
+	private static async Task<IEnumerable<HeartbeatDto>> GetHeartbeats(IHeartbeatService heartbeatService)
 	{
 		var heartbeats = await heartbeatService.GetAllAsync();
 		return heartbeats;

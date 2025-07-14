@@ -128,10 +128,6 @@ public static class DtoToDomain
 				{
 						ProcessId = id,
 				}).ToList() ?? new(),
-				Agents = configurationUpdateRequest.AgentIds.Select(id => new Domain.Models.Agent
-				{
-						Id = id,
-				}).ToList() ?? new()
 		};
 	}
 
@@ -156,6 +152,16 @@ public static class DtoToDomain
 			Status = processCreateRequest.Status
 		};
 	}
+    
+    public static Domain.Models.Process ToDomain(this ProcessUpdateRequest processUpdateRequest, long id)
+    {
+        return new Domain.Models.Process
+        {
+            Id = id,
+            Name = processUpdateRequest.Name,
+            Status = processUpdateRequest.Status
+        };
+    }
 	#endregion
 	
 	#region Policy
@@ -187,6 +193,21 @@ public static class DtoToDomain
 			RegistryValue = policyCreateRequest.RegistryValue
 		};
 	}
+    
+    public static Domain.Models.Policy ToDomain(this PolicyUpdateRequest policyUpdateRequest, long id)
+    {
+        return new Domain.Models.Policy
+        {
+            Id = id,
+            Name = policyUpdateRequest.Name,
+            Description = policyUpdateRequest.Description,
+            RegistryPath = policyUpdateRequest.RegistryPath,
+            RegistryKeyType = policyUpdateRequest.RegistryKeyType,
+            RegistryKey = policyUpdateRequest.RegistryKey,
+            RegistryValueType = policyUpdateRequest.RegistryValueType,
+            RegistryValue = policyUpdateRequest.RegistryValue
+        };
+    }
 	#endregion
 }
 

@@ -37,4 +37,18 @@ public class Policy : ITrackable
 	public DateTimeOffset? UpdatedAt { get; set; }
 	
 	public virtual ICollection<PolicyInConfiguration> Configurations { get; set; } = new List<PolicyInConfiguration>();
+
+    public void UpdateFrom(Policy policy)
+    {
+        if (policy is null) 
+            throw new ArgumentNullException(nameof(policy));
+
+        Name = policy.Name;
+        Description = policy.Description;
+        RegistryPath = policy.RegistryPath;
+        RegistryKeyType = policy.RegistryKeyType;
+        RegistryKey = policy.RegistryKey;
+        RegistryValueType = policy.RegistryValueType;
+        RegistryValue = policy.RegistryValue;
+    }
 }

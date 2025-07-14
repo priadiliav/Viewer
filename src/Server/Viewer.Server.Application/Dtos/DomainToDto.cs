@@ -50,6 +50,7 @@ public static class DomainToDto
 		{
 			Id = configuration.Id,
 			Name = configuration.Name,
+            IsApplied = configuration.IsApplied,
 			AgentIds = configuration.Agents.Select(a => a.Id).ToList(),
 			PolicyIds = configuration.Policies.Select(p => p.PolicyId).ToList(),
 			ProcessIds = configuration.Processes.Select(p => p.ProcessId).ToList()
@@ -62,9 +63,10 @@ public static class DomainToDto
 		{
 			Id = configuration.Id,
 			Name = configuration.Name,
+            IsApplied = configuration.IsApplied,
 			Agents = configuration.Agents.Select(a => a.ToDto()).ToList(),
-			Policies = configuration.Policies.Select(p => p.Policy?.ToDto()).ToList(),
-			Processes = configuration.Processes.Select(p => p.Process?.ToDto()).ToList()
+			Policies = configuration.Policies.Select(p => p.Policy.ToDto()).ToList(),
+			Processes = configuration.Processes.Select(p => p.Process.ToDto()).ToList()
 		};
 	}
 	#endregion

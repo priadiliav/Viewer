@@ -38,7 +38,7 @@ public class ConfigurationService(
 		return Task.CompletedTask;
 	}
 
-	private Task ApplyPoliciesAsync(IEnumerable<Domain.Models.Policy> policies)
+	private Task ApplyPoliciesAsync(IEnumerable<Domain.Models.Policy>   policies)
 	{
 		policyRepository.SetPolicies(policies.ToList());
 		

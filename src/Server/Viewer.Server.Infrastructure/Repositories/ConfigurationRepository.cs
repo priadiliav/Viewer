@@ -25,14 +25,32 @@ public class ConfigurationRepository(AppDbContext abbDbContext) : IConfiguration
 		return Task.CompletedTask;
 	}
 	
-	public async Task DeleteAsync(long id)
+	public Task DeleteAsync(Configuration configuration)
 	{
-		var configuration = await abbDbContext.Configurations.FindAsync(id);
-		if (configuration is not null)
-			abbDbContext.Configurations.Remove(configuration);
-	}
+        abbDbContext.Configurations.Remove(configuration);
+        return Task.CompletedTask;
+    }
 
-	public async Task<IEnumerable<Configuration>> GetAllAsync() =>
+    public async Task<IEnumerable<Configuration>> GetByPolicyIdAsync(long policyId) =>
+        await abbDbContext.Configurations
+                .Where(x => x.Policies.Any(p => p.PolicyId == policyId))
+                .ToListAsync();
+
+    public async Task<IEnumerable<Configuration>> GetByProcessIdAsync(long processId) =>
+        await abbDbContext.Configurations
+                .Where(x => x.Processes.Any(p => p.ProcessId == processId))
+                .ToListAsync();
+
+    public async Task<bool> ExistsByPolicyIdAsync(long policyId)
+        => await abbDbContext.Configurations
+            .AnyAsync(x => x.Policies.Any(p => p.PolicyId == policyId));
+
+    public async Task<bool> ExistsByProcessIdAsync(long processId)
+       => await abbDbContext.Configurations
+            .AnyAsync(x => x.Processes.Any(p => p.ProcessId == processId));
+
+
+    public async Task<IEnumerable<Configuration>> GetAllAsync() =>
 		await abbDbContext.Configurations
 				.Include(x => x.Policies)
 					.ThenInclude(x => x.Policy)

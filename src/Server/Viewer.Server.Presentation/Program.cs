@@ -73,6 +73,7 @@ app.MapConfigurationEndpoints();
 app.MapPolicyEndpoints();
 app.MapProcessEndpoints();
 app.MapHeartbeatEndpoints();
+app.MapEnumEndpoints();
 app.UseCors("AllowAllOrigins");
 app.Run();
 

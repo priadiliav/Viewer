@@ -9,6 +9,8 @@ public interface IPolicyService
 	Task<IEnumerable<PolicyDto>> GetAllAsync();
 	Task<PolicyDto?> GetByIdAsync(long id);
 	Task<PolicyDto?> CreateAsync(PolicyCreateRequest createRequest);
+    Task<PolicyDto?> UpdateAsync(long id, PolicyUpdateRequest updateRequest);
+    Task DeleteAsync(long id);
 }
 
 public class PolicyService(IUnitOfWork unitOfWork) : IPolicyService
@@ -33,4 +35,40 @@ public class PolicyService(IUnitOfWork unitOfWork) : IPolicyService
 
 		return await GetByIdAsync(policyDomain.Id);
 	}
+
+    public async Task<PolicyDto?> UpdateAsync(long id, PolicyUpdateRequest updateRequest)
+    {
+        var existingPolicy = await unitOfWork.Policies.GetByIdAsync(id);
+        if(existingPolicy is null)
+            throw new Exception($"Policy with ID {id} not found.");
+        
+        var updatedPolicyDomain = updateRequest.ToDomain(id);
+        existingPolicy.UpdateFrom(updatedPolicyDomain);
+        
+        // Reset the applied status of all configurations associated with this policy
+        var configurations = await unitOfWork.Configurations.GetByPolicyIdAsync(id);
+        foreach (var configuration in configurations)
+        {
+            configuration.ResetAppliedStatus();
+        }
+        
+        await unitOfWork.Policies.UpdateAsync(existingPolicy);
+        await unitOfWork.SaveChangesAsync();
+
+        return await GetByIdAsync(existingPolicy.Id);
+    }
+
+    public async Task DeleteAsync(long id)
+    {
+        var existingPolicy = await unitOfWork.Policies.GetByIdAsync(id);
+        if (existingPolicy is null)
+            throw new Exception($"Policy with ID {id} not found.");
+        
+        var isPolicyUsedInConfiguration = await unitOfWork.Configurations.ExistsByPolicyIdAsync(id);
+        if(isPolicyUsedInConfiguration)
+            throw new Exception($"Policy with ID {id} cannot be deleted because it is used in one or more configurations.");
+        
+        await unitOfWork.Policies.DeleteAsync(existingPolicy);
+        await unitOfWork.SaveChangesAsync();
+    }
 }

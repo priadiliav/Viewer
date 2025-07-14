@@ -7,6 +7,6 @@ public interface IPolicyRepository
 	Task<Policy?> GetByIdAsync(long id);
 	Task CreateAsync(Policy policy);
 	Task UpdateAsync(Policy policy);
-	Task DeleteAsync(long id);
+	Task DeleteAsync(Policy policy);
 	Task<IEnumerable<Policy>> GetAllAsync();
 }

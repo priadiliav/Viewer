@@ -7,23 +7,35 @@ namespace Viewer.Server.Presentation.Endpoints;
 public static class ProcessEndpoints
 {
 	
-	public static async Task<IEnumerable<ProcessDto>> GetProcesses(IProcessService processService)
+	private static async Task<IEnumerable<ProcessDto>> GetProcesses(IProcessService processService)
 	{
 		var processes = await processService.GetAllAsync();
 		return processes;
 	}
 	
-	public static async Task<ProcessDto?> GetProcessById(IProcessService processService, long id)
+    private static async Task<ProcessDto?> GetProcessById(IProcessService processService, long id)
 	{
 		var process = await processService.GetByIdAsync(id);
 		return process;
 	}
 	
-	public static async Task<ProcessDto> CreateProcess(IProcessService processService, [FromBody] ProcessCreateRequest createRequest)
+    private static async Task<ProcessDto?> CreateProcess(IProcessService processService, [FromBody] ProcessCreateRequest createRequest)
 	{
 		var process = await processService.CreateAsync(createRequest);
 		return process;
 	}
+
+    private static async Task<ProcessDto?> UpdateProcess(IProcessService processService, long id,
+            [FromBody] ProcessUpdateRequest updateRequest)
+    {
+        var process = await processService.UpdateAsync(id, updateRequest);
+        return process;
+    }
+    
+    private static async Task DeleteProcess(IProcessService processService, long id)
+    {
+        await processService.DeleteAsync(id);
+    }
 	
 	public static void MapProcessEndpoints(this IEndpointRouteBuilder app)
 	{
@@ -47,5 +59,17 @@ public static class ProcessEndpoints
 			.Produces(StatusCodes.Status400BadRequest)
 			.WithSummary("Create a new process")
 			.Accepts<ProcessCreateRequest>("application/json");
+        
+        group.MapPut("/{id:long}", UpdateProcess).WithName("UpdateProcess")
+            .Produces<ProcessDto?>()
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .WithSummary("Update an existing process")
+            .Accepts<ProcessUpdateRequest>("application/json");
+        
+        group.MapDelete("/{id:long}", DeleteProcess).WithName("DeleteProcess")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .WithSummary("Delete a process");
 	}
 }
