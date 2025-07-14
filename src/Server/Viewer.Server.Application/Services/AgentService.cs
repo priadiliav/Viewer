@@ -11,6 +11,9 @@ public interface IAgentService
 	Task<IEnumerable<AgentDto>> GetAllAsync();
 	Task<AgentDetailsDto?> GetByIdAsync(Guid id);
 	Task<AgentDetailsDto?> CreateAsync(AgentCreateRequest createRequest);
+    Task<AgentDetailsDto?> UpdateAsync(Guid id, AgentUpdateRequest updateRequest);
+    Task DeleteAsync(Guid id);
+    
 	Task<(string Token, Configuration Configuration)> LoginAsync(string agentId, string agentSecret);
 	Task<bool> AuthenticateAsync(string token);
 }
@@ -45,7 +48,32 @@ public class AgentService(
 		return await GetByIdAsync(agentDomain.Id);
 	}
 
-	public async Task<(string Token, Configuration Configuration)> LoginAsync(string agentId, string agentSecret)
+    public async Task<AgentDetailsDto?> UpdateAsync(Guid id, AgentUpdateRequest updateRequest)
+    {
+        var existingAgent = await unitOfWork.Agents.GetByIdAsync(id);
+        if (existingAgent is null)
+            throw new ArgumentException($"Agent with ID {id} does not exist.", nameof(id));
+        
+        var updatedAgentDomain = updateRequest.ToDomain(id);
+        existingAgent.UpdateFrom(updatedAgentDomain);
+        
+        await unitOfWork.Agents.UpdateAsync(existingAgent);
+        await unitOfWork.SaveChangesAsync();
+        
+        return await GetByIdAsync(id);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var existingAgentDomain = await unitOfWork.Agents.GetByIdAsync(id);
+        if (existingAgentDomain is null)
+            throw new ArgumentException($"Agent with ID {id} does not exist.", nameof(id));
+        
+        await unitOfWork.Agents.DeleteAsync(existingAgentDomain);
+        await unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task<(string Token, Configuration Configuration)> LoginAsync(string agentId, string agentSecret)
 	{
 		if (string.IsNullOrWhiteSpace(agentId))
 			throw new ArgumentException("Agent ID cannot be null or empty.", nameof(agentId));

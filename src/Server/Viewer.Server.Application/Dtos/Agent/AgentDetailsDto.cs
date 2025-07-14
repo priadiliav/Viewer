@@ -1,5 +1,3 @@
-using Viewer.Server.Application.Dtos.Heartbeat;
-
 namespace Viewer.Server.Application.Dtos.Agent;
 
 public class AgentDetailsDto

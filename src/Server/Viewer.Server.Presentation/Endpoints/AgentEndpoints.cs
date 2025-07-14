@@ -6,24 +6,35 @@ namespace Viewer.Server.Presentation.Endpoints;
 
 public static class AgentEndpoints
 {
-	public static async Task<IEnumerable<AgentDto>> GetAgents(IAgentService agentService)
+	private static async Task<IEnumerable<AgentDto>> GetAgents(IAgentService agentService)
 	{
 		var agents = await agentService.GetAllAsync();
 		return agents;
 	}
 	
-	public static async Task<AgentDetailsDto> CreateAgent(IAgentService agentService, [FromBody] AgentCreateRequest createRequest)
+	private static async Task<AgentDetailsDto?> CreateAgent(IAgentService agentService, [FromBody] AgentCreateRequest createRequest)
 	{
 		var agent = await agentService.CreateAsync(createRequest);
 		return agent;
 	}
 
-	public static async Task<AgentDetailsDto?> GetAgentById(IAgentService agentService, Guid id)
+	private static async Task<AgentDetailsDto?> GetAgentById(IAgentService agentService, Guid id)
 	{
 		var agent = await agentService.GetByIdAsync(id);
 		return agent;
 	}
 
+    private static async Task<AgentDetailsDto?> UpdateAgent(IAgentService agentService, Guid id, [FromBody] AgentUpdateRequest updateRequest)
+    {
+        var agent = await agentService.UpdateAsync(id, updateRequest);
+        return agent;
+    }
+    
+    private static async Task DeleteAgent(IAgentService agentService, Guid id)
+    {
+        await agentService.DeleteAsync(id);
+    }
+    
 	public static void MapAgentEndpoints(this IEndpointRouteBuilder app)
 	{
 		var group = app.MapGroup("/api/agents").WithTags("Agents");
@@ -46,5 +57,17 @@ public static class AgentEndpoints
 			.Produces(StatusCodes.Status201Created)
 			.Produces(StatusCodes.Status400BadRequest)
 			.Accepts<AgentCreateRequest>("application/json");
+        
+        group.MapPut("/{id:guid}", UpdateAgent).WithName("UpdateAgent")
+            .Produces<AgentDetailsDto?>()
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status200OK)
+            .WithSummary("Update an existing agent")
+            .Accepts<AgentUpdateRequest>("application/json");
+        
+        group.MapDelete("/{id:guid}", DeleteAgent).WithName("DeleteAgent")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .WithSummary("Delete an agent");
 	}
 }

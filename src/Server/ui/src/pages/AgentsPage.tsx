@@ -1,13 +1,13 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
+import {
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Box, Button, Paper, TextField, IconButton
+} from '@mui/material';
 import { useEffect, useState } from 'react';
+import BasicModal from '../components/BasicModal';
+import type { Configuration } from './ConfigurationsPage';
+import Autocomplete from '@mui/material/Autocomplete';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Agent {
   id: string;
@@ -16,32 +16,164 @@ interface Agent {
   configurationId: string;
 }
 
+interface AgentCreateRequest {
+  name: string;
+  configurationId: string;
+}
+
+interface AgentUpdateRequest {
+  id: string;
+  name: string;
+  configurationId: string;
+}
+
+
 export default function AgentsPage() {
   const [agents, setAgents] = useState<Agent[]>([]);
+  const [configurations, setConfigurations] = useState<Configuration[]>([]);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
+  const [formAgent, setFormAgent] = useState<AgentCreateRequest | AgentUpdateRequest>({
+    name: '',
+    configurationId: ''
+  });
 
   useEffect(() => {
-    fetch('https://localhost:7041/api/agents')
-      .then(response => response.json())
-      .then(data => {
-        setAgents(data);
-      })
+    fetchAgents();
   }, []);
+
+  const fetchAgents = () => {
+    fetch('https://localhost:7041/api/agents')
+      .then(res => res.json())
+      .then(data => setAgents(data));
+  };
+
+  const fetchConfigurations = () => {
+    fetch('https://localhost:7041/api/configurations')
+      .then(res => res.json())
+      .then(data => setConfigurations(data));
+  };
+
+  const handleAddAgent = () => {
+    if (!formAgent.name || !formAgent.configurationId) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    fetch('https://localhost:7041/api/agents', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formAgent),
+    })
+      .then(res => res.json())
+      .then(_ => {
+        closeModal();
+        fetchAgents();
+      });
+  };
+
+  const handleUpdateAgent = () => {    
+    const { id, ...updateData } = formAgent as AgentUpdateRequest;
+    if (!updateData.name || !updateData.configurationId) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    fetch(`https://localhost:7041/api/agents/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updateData),
+    })
+      .then(res => res.json())
+      .then(_ => {
+        closeModal();
+        fetchAgents();
+      });
+  };
+
+  const handleDeleteAgent = (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this agent?')) return;
+
+    fetch(`https://localhost:7041/api/agents/${id}`, { method: 'DELETE' })
+      .then(_ => fetchAgents());
+  };
+
+  const openEditModal = (agent: Agent) => {
+    fetchConfigurations();
+    setFormAgent({
+      id: agent.id,
+      name: agent.name,
+      configurationId: agent.configurationId,
+    });
+    setEditMode(true);
+    setModalOpen(true);
+  };
+
+  const openCreateModal = () => {
+    fetchConfigurations();
+    setFormAgent({ name: '', configurationId: '' });
+    setEditMode(false);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditMode(false);
+    setFormAgent({ name: '', configurationId: '' });
+  };
 
   return (
     <>
-      <Box sx={{ display: 'flex', mb:2 }}>
-        <Button variant="contained" color="primary" onClick={() => alert('Add Agent')}>
+      <Box sx={{ display: 'flex', mb: 2 }}>
+        <Button variant="contained" onClick={openCreateModal}>
           Add Agent
         </Button>
-      </Box>      
+      </Box>
+
+      <BasicModal open={modalOpen} onClose={closeModal} title={editMode ? 'Edit Agent' : 'Add Agent'}>
+        <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            label="Agent Name"
+            value={formAgent.name}
+            onChange={(e) => setFormAgent({ ...formAgent, name: e.target.value })}
+            required
+          />
+
+          <Autocomplete
+            options={configurations}
+            getOptionLabel={(option) => option.name}
+            value={configurations.find(c => c.id === formAgent.configurationId) || null}
+            onChange={(_, value) => {
+              if (value) {
+                setFormAgent({ ...formAgent, configurationId: value.id });
+              }
+            }}
+            renderOption={(props, option) => (
+              <li {...props} key={option.id}>
+                {option.name}
+              </li>
+            )}
+            renderInput={(params) => <TextField {...params} label="Select Configuration" />}
+            onOpen={fetchConfigurations}
+          />
+
+          <Button variant="contained" onClick={editMode ? handleUpdateAgent : handleAddAgent}>
+            {editMode ? 'Update Agent' : 'Save Agent'}
+          </Button>
+        </Box>
+      </BasicModal>
+
       <TableContainer component={Paper}>
-        <Table aria-label="agents table">
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Configuration ID</TableCell>
               <TableCell>Is connected</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -51,9 +183,17 @@ export default function AgentsPage() {
                 <TableCell>{agent.name}</TableCell>
                 <TableCell>{agent.configurationId}</TableCell>
                 <TableCell>
-                    {agent.isConnected ? 
-                        <span style={{ color: 'green' }}>Yes</span> :
-                        <span style={{ color: 'red' }}>No</span>}
+                  <span style={{ color: agent.isConnected ? 'green' : 'red' }}>
+                    {agent.isConnected ? 'Yes' : 'No'}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <IconButton color="primary" onClick={() => openEditModal(agent)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => handleDeleteAgent(agent.id)}>
+                    <DeleteIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

@@ -27,6 +27,16 @@ public static class DtoToDomain
 			ConfigurationId = agentCreateRequest.ConfigurationId
 		};
 	}
+    
+    public static Domain.Models.Agent ToDomain(this AgentUpdateRequest agentUpdateRequest, Guid id)
+    {
+        return new Domain.Models.Agent
+        {
+            Id = id,
+            Name = agentUpdateRequest.Name,
+            ConfigurationId = agentUpdateRequest.ConfigurationId
+        };
+    }
 	#endregion
 
 	#region Heartbeat
