@@ -41,6 +41,8 @@ interface PolicyUpdateRequest {
 }
 
 export default function PolicyPage() {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    
     const [policies, setPolicies] = useState<Policy[]>([]);
     
     const [modalOpen, setModalOpen] = useState(false);
@@ -66,13 +68,13 @@ export default function PolicyPage() {
     }, []);
 
     const fetchPolicies = () => {
-        fetch('https://localhost:7041/api/policies')
+        fetch(`${apiUrl}/api/policies`)
             .then(res => res.json())
             .then(data => setPolicies(data));
     };
 
     const fetchEnums = () => {
-    fetch('https://localhost:7041/api/enums')
+    fetch(`${apiUrl}/api/enums`)
         .then(res => res.json())
         .then(data => {
             console.log(data);
@@ -91,7 +93,7 @@ export default function PolicyPage() {
             return;
         }
 
-        fetch('https://localhost:7041/api/policies', {
+        fetch(`${apiUrl}/api/policies`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formPolicy),
@@ -113,7 +115,7 @@ export default function PolicyPage() {
             return;
         }
 
-        fetch(`https://localhost:7041/api/policies/${id}`, {
+        fetch(`${apiUrl}/api/policies/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData),
@@ -126,7 +128,7 @@ export default function PolicyPage() {
     };
 
     const handleDeletePolicy = (id: string) => {
-        fetch(`https://localhost:7041/api/policies/${id}`, {
+        fetch(`${apiUrl}/api/policies/${id}`, {
             method: 'DELETE',
         })
             .then(_ => {

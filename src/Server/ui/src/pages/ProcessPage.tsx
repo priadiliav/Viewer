@@ -27,6 +27,8 @@ interface ProcessUpdateRequest {
 
 
 export default function ProcessPage() {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    
     const [processes, setProcesses] = useState<Process[]>([]);
     
     const [modalOpen, setModalOpen] = useState(false);
@@ -45,13 +47,13 @@ export default function ProcessPage() {
     }, []);
 
     const fetchProcesses = () => {
-        fetch('https://localhost:7041/api/processes')
+        fetch(`${apiUrl}/api/processes`)
             .then(response => response.json())
             .then(data => setProcesses(data))
     };
 
     const fetchEnums = () => {
-        fetch('https://localhost:7041/api/enums')
+        fetch(`${apiUrl}/api/enums`)
             .then(response => response.json())
 
             .then(data => {
@@ -65,7 +67,7 @@ export default function ProcessPage() {
             alert('Please fill in all fields');
             return;
         }
-        fetch('https://localhost:7041/api/processes', {
+        fetch(`${apiUrl}/api/processes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,7 +90,7 @@ export default function ProcessPage() {
             alert('Please fill in all fields');
             return;
         }
-        fetch(`https://localhost:7041/api/processes/${id}`, {
+        fetch(`${apiUrl}/api/processes/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -106,7 +108,7 @@ export default function ProcessPage() {
     }
 
     const handleDeleteProcess = (id: string) => {
-        fetch(`https://localhost:7041/api/processes/${id}`, {
+        fetch(`${apiUrl}/api/processes/${id}`, {
             method: 'DELETE'
         })
         .then(response => {

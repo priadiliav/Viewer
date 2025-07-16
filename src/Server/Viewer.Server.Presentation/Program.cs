@@ -66,14 +66,13 @@ if (app.Environment.IsDevelopment())
 app.MapGrpcService<GrpcStreamService>();
 app.MapGrpcService<GrpcManagementService>();
 
-app.UseHttpsRedirection();
-
 app.MapAgentEndpoints();
 app.MapConfigurationEndpoints();
 app.MapPolicyEndpoints();
 app.MapProcessEndpoints();
 app.MapHeartbeatEndpoints();
 app.MapEnumEndpoints();
+
 app.UseCors("AllowAllOrigins");
 app.Run();
 

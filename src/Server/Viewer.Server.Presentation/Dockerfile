@@ -7,14 +7,21 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+# Copy csproj files separately for restore
 COPY ["src/Server/Viewer.Server.Presentation/Viewer.Server.Presentation.csproj", "src/Server/Viewer.Server.Presentation/"]
 COPY ["src/Viewer.Shared/Viewer.Shared.csproj", "src/Viewer.Shared/"]
 COPY ["src/Server/Viewer.Server.Domain/Viewer.Server.Domain.csproj", "src/Server/Viewer.Server.Domain/"]
 COPY ["src/Server/Viewer.Server.Infrastructure/Viewer.Server.Infrastructure.csproj", "src/Server/Viewer.Server.Infrastructure/"]
 COPY ["src/Server/Viewer.Server.Application/Viewer.Server.Application.csproj", "src/Server/Viewer.Server.Application/"]
+
+# Restore
 RUN dotnet restore "src/Server/Viewer.Server.Presentation/Viewer.Server.Presentation.csproj"
-COPY . .
-WORKDIR "/src/src/Server/Viewer.Server.Presentation"
+
+COPY . /src
+
+WORKDIR /src/src/Server/Viewer.Server.Presentation
+
 RUN dotnet build "Viewer.Server.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

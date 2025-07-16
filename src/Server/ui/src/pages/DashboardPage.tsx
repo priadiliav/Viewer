@@ -14,11 +14,13 @@ interface SeriesData {
 }
 
 export default function DashboardPage() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+    
   const [xAxisLabels, setXAxisLabels] = useState<string[]>([]);
   const [seriesData, setSeriesData] = useState<SeriesData[]>([]);
 
   useEffect(() => {
-    fetch("https://localhost:7041/api/heartbeats")
+    fetch(`${apiUrl}/api/heartbeats`)
       .then((res) => res.json())
       .then((data: Heartbeat[]) => {
         const { labels, series } = groupByAgentAndMinute(data);

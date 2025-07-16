@@ -33,6 +33,8 @@ export interface ConfigurationUpdateRequest {
 }
 
 export default function ConfigurationsPage() {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    
     const [configurations, setConfigurations] = useState<Configuration[]>([]);
     const [policies, setPolicies] = useState<Policy[]>([]);
     const [processes, setProcesses] = useState<Process[]>([]);
@@ -51,19 +53,19 @@ export default function ConfigurationsPage() {
     }, []);
 
     const fetchConfigurations = async () => {
-        fetch('https://localhost:7041/api/configurations')
+        fetch(`${apiUrl}/api/configurations`)
         .then(response => response.json())
         .then(data => {setConfigurations(data)})
     };
 
     const fetchPolicies = () => {
-        fetch('https://localhost:7041/api/policies')
+        fetch(`${apiUrl}/api/policies`)
         .then(res => res.json())
         .then(data => setPolicies(data));
     }
 
     const fetchProcesses = () => {
-        fetch('https://localhost:7041/api/processes')
+        fetch(`${apiUrl}/api/processes`)
         .then(res => res.json())
         .then(data => setProcesses(data));
     }
@@ -73,7 +75,7 @@ export default function ConfigurationsPage() {
             alert('Please fill in all fields');
             return;
         }
-        fetch('https://localhost:7041/api/configurations', {
+        fetch(`${apiUrl}/api/configurations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -93,7 +95,7 @@ export default function ConfigurationsPage() {
             alert('Please fill in all fields');
             return;
         }
-        fetch(`https://localhost:7041/api/configurations/${id}`, {
+        fetch(`${apiUrl}/api/configurations/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -108,7 +110,7 @@ export default function ConfigurationsPage() {
     }
 
     const handleDeleteConfiguration = (id: string) => {
-        fetch(`https://localhost:7041/api/configurations/${id}`, {
+        fetch(`${apiUrl}/api/configurations/${id}`, {
             method: 'DELETE'
         })
         .then(() => {
@@ -117,7 +119,7 @@ export default function ConfigurationsPage() {
     }
 
     const handleApplyConfiguration = (id: string) => {
-        fetch(`https://localhost:7041/api/configurations/${id}/apply`, {
+        fetch(`${apiUrl}/api/configurations/${id}/apply`, {
             method: 'POST'
         })
         .then(() => {

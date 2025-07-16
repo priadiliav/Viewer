@@ -29,6 +29,8 @@ interface AgentUpdateRequest {
 
 
 export default function AgentsPage() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const [agents, setAgents] = useState<Agent[]>([]);
   const [configurations, setConfigurations] = useState<Configuration[]>([]);
 
@@ -45,13 +47,13 @@ export default function AgentsPage() {
   }, []);
 
   const fetchAgents = () => {
-    fetch('https://localhost:7041/api/agents')
+    fetch(`${apiUrl}/api/agents`)
       .then(res => res.json())
       .then(data => setAgents(data));
   };
 
   const fetchConfigurations = () => {
-    fetch('https://localhost:7041/api/configurations')
+    fetch(`${apiUrl}/api/configurations`)
       .then(res => res.json())
       .then(data => setConfigurations(data));
   };
@@ -62,7 +64,7 @@ export default function AgentsPage() {
       return;
     }
 
-    fetch('https://localhost:7041/api/agents', {
+    fetch(`${apiUrl}/api/agents`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formAgent),
@@ -81,7 +83,7 @@ export default function AgentsPage() {
       return;
     }
 
-    fetch(`https://localhost:7041/api/agents/${id}`, {
+    fetch(`${apiUrl}/api/agents/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updateData),
@@ -96,7 +98,7 @@ export default function AgentsPage() {
   const handleDeleteAgent = (id: string) => {
     if (!window.confirm('Are you sure you want to delete this agent?')) return;
 
-    fetch(`https://localhost:7041/api/agents/${id}`, { method: 'DELETE' })
+    fetch(`${apiUrl}/api/agents/${id}`, { method: 'DELETE' })
       .then(_ => fetchAgents());
   };
 
