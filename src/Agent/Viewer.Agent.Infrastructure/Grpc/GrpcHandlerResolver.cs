@@ -1,16 +1,15 @@
 using Communication.ServerToAgent;
 using Microsoft.Extensions.DependencyInjection;
 using Viewer.Agent.Application.Interfaces.Handlers;
-using Viewer.Agent.Infrastructure.Grpc.Mappers;
 
-namespace Viewer.Agent.Infrastructure.Grpc.Handlers;
+namespace Viewer.Agent.Infrastructure.Grpc;
 
-public interface IMessageHandlerFactory
+public interface IHandlerResolver
 {
 	Task HandleAsync(ServerToAgentMessage payloadOneofCase);
 }
 
-public class GrpcMessageHandlerFactory(IServiceProvider serviceProvider) : IMessageHandlerFactory
+public class GrpcHandlerResolver(IServiceProvider serviceProvider) : IHandlerResolver
 {
 	public Task HandleAsync(ServerToAgentMessage message)
 	{

@@ -1,34 +1,30 @@
-using Communication.Common;
 using Communication.Management;
-using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Viewer.Agent.Application.Services;
 using Viewer.Agent.Domain.Configs;
-using Viewer.Agent.Infrastructure.Grpc.Mappers;
-using Viewer.Agent.Infrastructure.Grpc.Utils;
 using AuthContext = Viewer.Agent.Domain.Configs.AuthContext;
 
-namespace Viewer.Agent.Infrastructure.Grpc.Services;
+namespace Viewer.Agent.Infrastructure.Grpc;
 
-public interface IManagementServiceClient
+public interface IManagementClientService
 {
 	Task LoginAsync(CancellationToken cancellationToken = default);
 }
-public class GrpcManagementServiceClientClient : IManagementServiceClient
+public class GrpcManagementClientService : IManagementClientService
 {
-	private readonly ILogger<GrpcManagementServiceClientClient> _logger;
+	private readonly ILogger<GrpcManagementClientService> _logger;
 	private readonly ManagementService.ManagementServiceClient _managementClient;
 	private readonly IConfigurationService _configurationService;
 	private readonly AuthContext _authContext;
 	private readonly AgentConfig _agentConfig;
 	
-	public GrpcManagementServiceClientClient(
+	public GrpcManagementClientService(
 		ManagementService.ManagementServiceClient managementClient,
 		IConfigurationService configurationService,
 		AuthContext authContext,
 		IOptions<AgentConfig> agentConfigOptions,
-		ILogger<GrpcManagementServiceClientClient> logger)
+		ILogger<GrpcManagementClientService> logger)
 	{
 		this._managementClient = managementClient;
 		this._configurationService = configurationService;

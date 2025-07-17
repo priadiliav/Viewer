@@ -5,13 +5,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Viewer.Agent.Domain.Configs;
-using Viewer.Agent.Infrastructure.Grpc.Handlers;
-using Viewer.Agent.Infrastructure.Grpc.Utils;
 using AuthContext = Viewer.Agent.Domain.Configs.AuthContext;
 
-namespace Viewer.Agent.Infrastructure.Grpc.Services;
+namespace Viewer.Agent.Infrastructure.Grpc;
 
-public interface IStreamManagerClient
+public interface IStreamClientManager
 {
 	Task StartStreamAsync(CancellationToken cancellationToken = default);
 	Task SendMessageAsync(AgentToServerMessage message, CancellationToken cancellationToken = default);
@@ -19,12 +17,12 @@ public interface IStreamManagerClient
 	ValueTask DisposeAsync();
 }
 
-public class GrpcStreamManagerClient(
-	ILogger<GrpcStreamManagerClient> logger,
+public class GrpcStreamClientManager(
+	ILogger<GrpcStreamClientManager> logger,
 	IOptions<AgentConfig> agentConfig,
 	AuthContext authContext,
-	IMessageHandlerFactory messageHandlerFactory,
-	Communication.StreamService.StreamServiceClient streamServiceClient) : IStreamManagerClient
+	IHandlerResolver handlerResolver,
+	Communication.StreamService.StreamServiceClient streamServiceClient) : IStreamClientManager
 {
 	private AsyncDuplexStreamingCall<AgentToServerMessage, ServerToAgentMessage>? _call;
 	private readonly SemaphoreSlim _streamLock = new(1, 1);
@@ -39,7 +37,7 @@ public class GrpcStreamManagerClient(
 	public async Task StartStreamAsync(CancellationToken cancellationToken = default)
 	{
 		if (_isDisposed) 
-			throw new ObjectDisposedException(nameof(GrpcStreamManagerClient));
+			throw new ObjectDisposedException(nameof(GrpcStreamClientManager));
 		
 		var retryPolicy = Policy
 				.Handle<RpcException>(IsTransientGrpcError) 
@@ -88,7 +86,7 @@ public class GrpcStreamManagerClient(
 	public async Task SendMessageAsync(AgentToServerMessage message, CancellationToken cancellationToken = default)
 	{
 		if (_isDisposed) 
-			throw new ObjectDisposedException(nameof(GrpcStreamManagerClient));
+			throw new ObjectDisposedException(nameof(GrpcStreamClientManager));
 
 		if (_call is null or { RequestStream: null })
 			throw new InvalidOperationException("Stream is not started. Call StartStreamAsync first.");
@@ -136,7 +134,7 @@ public class GrpcStreamManagerClient(
 	/// <exception cref="InvalidOperationException"></exception>
 	public async Task HandleMessagesAsync(CancellationToken cancellationToken = default)
 	{
-		if (_isDisposed) throw new ObjectDisposedException(nameof(GrpcStreamManagerClient));
+		if (_isDisposed) throw new ObjectDisposedException(nameof(GrpcStreamClientManager));
 
 		if (_call == null || _call.ResponseStream == null)
 			throw new InvalidOperationException("Stream is not started. Call StartStreamAsync first.");
@@ -147,7 +145,7 @@ public class GrpcStreamManagerClient(
 			{
 				var message = _call.ResponseStream.Current;
 				
-				await messageHandlerFactory.HandleAsync(message);
+				await handlerResolver.HandleAsync(message);
 			}
 		}
 		catch (RpcException ex) when (ex.StatusCode == StatusCode.Cancelled && cancellationToken.IsCancellationRequested)

@@ -10,13 +10,10 @@ namespace Viewer.Agent.Application.Services;
 public interface IHeartbeatService
 {
 	Task SendHeartbeatAsync(Heartbeat heartbeat, CancellationToken cancellationToken = default);
-	
 	Task ProduceHeartbeatsAsync(CancellationToken cancellationToken = default);
 }
 
-public class HeartbeatService(
-		ILogger<HeartbeatService> logger,
-		IHeartbeatProducer heartbeatProducer) : IHeartbeatService
+public class HeartbeatService(ILogger<HeartbeatService> logger, IHeartbeatProducer heartbeatProducer) : IHeartbeatService
 {
 	public async Task SendHeartbeatAsync(Heartbeat heartbeat, CancellationToken cancellationToken = default)
 	{
@@ -24,14 +21,14 @@ public class HeartbeatService(
 			throw new ArgumentNullException(nameof(heartbeat));
 
 		var retryPolicy = Policy
-				.Handle<Exception>()
-				.WaitAndRetryAsync(
-						retryCount: 3,
-						sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
-						onRetry: (exception, timespan, retryCount, context) =>
-						{
-							logger.LogWarning(exception, "Retry {RetryCount} after {Delay} due to heartbeat send failure", retryCount, timespan);
-						});
+			.Handle<Exception>()
+			.WaitAndRetryAsync(
+				retryCount: 3,
+				sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+				onRetry: (exception, timespan, retryCount, context) =>
+				{
+					logger.LogWarning(exception, "Retry {RetryCount} after {Delay} due to heartbeat send failure", retryCount, timespan);
+				});
 
 		await retryPolicy.ExecuteAsync(async ct =>
 		{

@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Viewer.Agent.Application.Dtos;
 using Viewer.Agent.Application.Interfaces.Repositories;
 using Viewer.Agent.Domain.Models;
 
@@ -13,9 +12,7 @@ public interface IProcessService
 	Task StartProcessWatcherAsync(CancellationToken cancellationToken = default);
 	Task StopProcessWatcherAsync(CancellationToken cancellationToken = default);
 }
-public class ProcessService(
-		ILogger<ProcessService> logger,
-		IProcessRepository processRepository) : IProcessService
+public class ProcessService(ILogger<ProcessService> logger, IProcessRepository processRepository) : IProcessService
 {
 	public IEnumerable<Process> GetAllConfigProcesses()
 	{

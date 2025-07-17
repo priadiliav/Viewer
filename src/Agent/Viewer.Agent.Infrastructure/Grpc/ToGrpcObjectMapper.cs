@@ -1,4 +1,4 @@
-namespace Viewer.Agent.Infrastructure.Grpc.Mappers;
+namespace Viewer.Agent.Infrastructure.Grpc;
 
 public static class ToGrpcObjectMapper
 {

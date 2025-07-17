@@ -9,9 +9,9 @@ public interface IConfigurationService
 }
 
 public class ConfigurationService(
-		IProcessRepository processRepository,
-		IPolicyRepository policyRepository,
-		IConfigurationRepository configurationRepository) : IConfigurationService
+	IProcessRepository processRepository,
+	IPolicyRepository policyRepository,
+	IConfigurationRepository configurationRepository) : IConfigurationService
 {
 	public async Task ApplyConfigurationAsync(Configuration configuration)
 	{
@@ -26,7 +26,7 @@ public class ConfigurationService(
 		await Task.WhenAll(applyProcessesTask, applyPoliciesTask);
 	}
 	
-	private Task ApplyProcessesAsync(IEnumerable<Domain.Models.Process> processes)
+	private Task ApplyProcessesAsync(IEnumerable<Process> processes)
 	{
 		var blockedProcessesNames = processes
 			.Where(p => p.Status == Domain.Models.ProcessStatus.Blocked)
@@ -38,7 +38,7 @@ public class ConfigurationService(
 		return Task.CompletedTask;
 	}
 
-	private Task ApplyPoliciesAsync(IEnumerable<Domain.Models.Policy>   policies)
+	private Task ApplyPoliciesAsync(IEnumerable<Policy>   policies)
 	{
 		policyRepository.SetPolicies(policies.ToList());
 		

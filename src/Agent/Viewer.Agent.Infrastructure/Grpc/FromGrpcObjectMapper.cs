@@ -1,6 +1,6 @@
 using Viewer.Agent.Domain.Models;
 
-namespace Viewer.Agent.Infrastructure.Grpc.Mappers;
+namespace Viewer.Agent.Infrastructure.Grpc;
 
 public static class FromGrpcObjectMapper
 {

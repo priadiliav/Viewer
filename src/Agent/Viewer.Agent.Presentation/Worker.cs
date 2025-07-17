@@ -3,14 +3,14 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Options;
 using Viewer.Agent.Application.Services;
 using Viewer.Agent.Domain.Configs;
-using Viewer.Agent.Infrastructure.Grpc.Services;
+using Viewer.Agent.Infrastructure.Grpc;
 
 namespace Viewer.Agent.Presentation;
 
 public class Worker(
 		IOptions<AgentConfig> agentConfigOptions,
-		IManagementServiceClient managementServiceClient,
-		IStreamManagerClient streamManagerClient,
+		IManagementClientService managementClientService,
+		IStreamClientManager streamClientManager,
 		IHeartbeatService heartbeatService,
 		IProcessService processService,
 		ILogger<Worker> logger) : BackgroundService
@@ -21,7 +21,7 @@ public class Worker(
 	{
 		try
 		{
-			await managementServiceClient.LoginAsync(stoppingToken);
+			await managementClientService.LoginAsync(stoppingToken);
 			logger.LogInformation("Agent successfully logged in");
 		}
 		catch (Exception ex)
@@ -33,7 +33,7 @@ public class Worker(
 		try
 		{
 			logger.LogInformation("Starting stream manager client...");
-			await streamManagerClient.StartStreamAsync(cancellationToken: stoppingToken);
+			await streamClientManager.StartStreamAsync(cancellationToken: stoppingToken);
 			logger.LogInformation("Stream has been started successfully");
 		}
 		catch (Exception ex)
@@ -45,7 +45,7 @@ public class Worker(
 		try
 		{
 			logger.LogInformation("Handling messages from stream manager client...");
-			var handleMessagesAsync = streamManagerClient.HandleMessagesAsync(stoppingToken);
+			var handleMessagesAsync = streamClientManager.HandleMessagesAsync(stoppingToken);
 			logger.LogInformation("Message handling started successfully");
 			
 			logger.LogInformation("Starting heartbeat producing...");
@@ -76,7 +76,7 @@ public class Worker(
 
 			try
 			{
-				await streamManagerClient.DisposeAsync();
+				await streamClientManager.DisposeAsync();
 			}
 			catch (Exception ex)
 			{
