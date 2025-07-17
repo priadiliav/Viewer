@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using Communication;
 using Communication.AgentToServer;
 using Communication.ServerToAgent;
 using Grpc.Core;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Viewer.Server.Application.Interfaces.Services;
 using Viewer.Server.Infrastructure.Grpc.Handlers;
 
-namespace Viewer.Server.Infrastructure.Grpc;
+namespace Viewer.Server.Infrastructure.Grpc.Services;
 
 
 public interface IGrpcStreamManager

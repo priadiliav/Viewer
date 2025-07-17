@@ -2,6 +2,8 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
 using Viewer.Server.Application.Services;
 using Viewer.Server.Domain.Models;
+using Viewer.Server.Infrastructure.Grpc.Mappers;
+using Viewer.Server.Infrastructure.Grpc.Services;
 
 namespace Viewer.Server.Infrastructure.Grpc.Producers;
 

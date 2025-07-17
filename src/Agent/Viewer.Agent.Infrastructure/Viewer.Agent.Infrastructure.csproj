@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Viewer.Shared\Viewer.Shared.csproj" />
+      <ProjectReference Include="..\..\Common\Viewer.Shared\Viewer.Shared.csproj" />
       <ProjectReference Include="..\Viewer.Agent.Application\Viewer.Agent.Application.csproj" />
     </ItemGroup>
     

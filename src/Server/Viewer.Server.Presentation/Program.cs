@@ -8,6 +8,7 @@ using Viewer.Server.Infrastructure.Configs;
 using Viewer.Server.Infrastructure.Grpc;
 using Viewer.Server.Infrastructure.Grpc.Handlers;
 using Viewer.Server.Infrastructure.Grpc.Producers;
+using Viewer.Server.Infrastructure.Grpc.Services;
 using Viewer.Server.Infrastructure.Repositories;
 using Viewer.Server.Presentation.Endpoints;
 

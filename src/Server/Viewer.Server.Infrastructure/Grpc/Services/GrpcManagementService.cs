@@ -1,11 +1,9 @@
-using Communication.Common;
 using Communication.Management;
 using Grpc.Core;
-using Microsoft.AspNetCore.Identity;
-using Viewer.Server.Application.Interfaces.Repositories;
 using Viewer.Server.Application.Services;
+using Viewer.Server.Infrastructure.Grpc.Mappers;
 
-namespace Viewer.Server.Infrastructure.Grpc;
+namespace Viewer.Server.Infrastructure.Grpc.Services;
 
 public class GrpcManagementService(IAgentService agentService) : Communication.Management.ManagementService.ManagementServiceBase
 {

@@ -49,13 +49,10 @@ public class ConfigurationRepository(AppDbContext abbDbContext) : IConfiguration
        => await abbDbContext.Configurations
             .AnyAsync(x => x.Processes.Any(p => p.ProcessId == processId));
 
-
     public async Task<IEnumerable<Configuration>> GetAllAsync() =>
 		await abbDbContext.Configurations
 				.Include(x => x.Policies)
-					.ThenInclude(x => x.Policy)
 				.Include(x => x.Processes)
-					.ThenInclude(x => x.Process)
 				.Include(x => x.Agents)
 				.OrderByDescending(x => x.CreatedAt)
 				.ToListAsync();

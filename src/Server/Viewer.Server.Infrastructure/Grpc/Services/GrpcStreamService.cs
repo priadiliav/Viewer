@@ -3,8 +3,9 @@ using Communication.ServerToAgent;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Viewer.Server.Application.Services;
+using Viewer.Server.Infrastructure.Grpc.Utils;
 
-namespace Viewer.Server.Infrastructure.Grpc;
+namespace Viewer.Server.Infrastructure.Grpc.Services;
 
 public class GrpcStreamService(
 	ILogger<GrpcStreamService> logger, 

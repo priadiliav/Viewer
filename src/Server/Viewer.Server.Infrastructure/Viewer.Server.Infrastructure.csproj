@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Viewer.Shared\Viewer.Shared.csproj" />
+      <ProjectReference Include="..\..\Common\Viewer.Shared\Viewer.Shared.csproj" />
       <ProjectReference Include="..\Viewer.Server.Application\Viewer.Server.Application.csproj" />
     </ItemGroup>
 

@@ -1,6 +1,7 @@
 using Communication.AgentToServer;
 using Microsoft.Extensions.DependencyInjection;
 using Viewer.Server.Application.Interfaces.Handlers;
+using Viewer.Server.Infrastructure.Grpc.Mappers;
 
 namespace Viewer.Server.Infrastructure.Grpc.Handlers;
 

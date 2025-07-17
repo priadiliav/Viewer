@@ -1,7 +1,6 @@
-using Viewer.Server.Application.Dtos;
 using Viewer.Server.Domain.Models;
 
-namespace Viewer.Server.Infrastructure.Grpc;
+namespace Viewer.Server.Infrastructure.Grpc.Mappers;
 
 public static class ToGrpcObjectMapper
 {
