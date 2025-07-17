@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agent", "Agent", "{F72E57ED
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{52E7FB1C-042E-4161-89C4-EDF21AE35C44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Shared", "src\Viewer.Shared\Viewer.Shared.csproj", "{8F86A5CA-5132-4D78-A8A0-CCE91CCF7339}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Shared", "src\Common\Viewer.Shared\Viewer.Shared.csproj", "{8F86A5CA-5132-4D78-A8A0-CCE91CCF7339}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Domain", "src\Server\Viewer.Server.Domain\Viewer.Server.Domain.csproj", "{36111370-87AB-4940-80FD-EA31E0EB17BE}"
 EndProject
