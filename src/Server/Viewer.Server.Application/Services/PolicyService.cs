@@ -1,17 +1,9 @@
 using Viewer.Server.Application.Dtos;
 using Viewer.Server.Application.Dtos.Policy;
 using Viewer.Server.Application.Interfaces.Repositories;
+using Viewer.Server.Application.Interfaces.Services;
 
 namespace Viewer.Server.Application.Services;
-
-public interface IPolicyService
-{
-	Task<IEnumerable<PolicyDto>> GetAllAsync();
-	Task<PolicyDto?> GetByIdAsync(long id);
-	Task<PolicyDto?> CreateAsync(PolicyCreateRequest createRequest);
-    Task<PolicyDto?> UpdateAsync(long id, PolicyUpdateRequest updateRequest);
-    Task DeleteAsync(long id);
-}
 
 public class PolicyService(IUnitOfWork unitOfWork) : IPolicyService
 {

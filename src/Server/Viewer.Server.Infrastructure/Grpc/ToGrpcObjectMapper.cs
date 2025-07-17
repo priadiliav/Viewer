@@ -1,6 +1,6 @@
 using Viewer.Server.Domain.Models;
 
-namespace Viewer.Server.Infrastructure.Grpc.Mappers;
+namespace Viewer.Server.Infrastructure.Grpc;
 
 public static class ToGrpcObjectMapper
 {
@@ -25,6 +25,4 @@ public static class ToGrpcObjectMapper
 			}) },
 		};
 	}
-	
-	
 }

@@ -1,6 +1,6 @@
 using Grpc.Core;
 
-namespace Viewer.Server.Infrastructure.Grpc.Utils;
+namespace Viewer.Server.Infrastructure.Grpc;
 
 public static class GrpcMetadataExtensions
 {

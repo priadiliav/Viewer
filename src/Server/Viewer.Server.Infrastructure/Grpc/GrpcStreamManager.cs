@@ -5,9 +5,8 @@ using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Viewer.Server.Application.Interfaces.Services;
-using Viewer.Server.Infrastructure.Grpc.Handlers;
 
-namespace Viewer.Server.Infrastructure.Grpc.Services;
+namespace Viewer.Server.Infrastructure.Grpc;
 
 
 public interface IGrpcStreamManager
@@ -74,7 +73,7 @@ public class GrpcStreamManager(
 				while (await stream.Reader.MoveNext())
 				{
 					using var scope = scopeFactory.CreateScope();
-					var messageHandlerFactory = scope.ServiceProvider.GetRequiredService<IMessageHandlerFactory>();
+					var messageHandlerFactory = scope.ServiceProvider.GetRequiredService<IHandlerResolver>();
 					await messageHandlerFactory.HandleAsync(stream.Reader.Current, agentId);
 				}
 			}

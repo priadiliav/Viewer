@@ -1,4 +1,5 @@
 using Viewer.Server.Application.Dtos.Heartbeat;
+using Viewer.Server.Application.Interfaces.Services;
 using Viewer.Server.Application.Services;
 
 namespace Viewer.Server.Presentation.Endpoints;

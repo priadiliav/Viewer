@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Viewer.Server.Application.Dtos;
+using Viewer.Server.Application.Interfaces.Services;
 using Viewer.Server.Application.Services;
 
 namespace Viewer.Server.Presentation.Endpoints;

@@ -7,23 +7,11 @@ using Viewer.Server.Domain.Models;
 
 namespace Viewer.Server.Application.Services;
 
-public interface IConfigurationProducer : IMessageFromServerProducer<Configuration>;
-
-public interface IConfigurationService
-{
-	Task<IEnumerable<ConfigurationDto>> GetAllAsync();
-	Task<ConfigurationDetailsDto?> GetByIdAsync(long id);
-	Task<ConfigurationDetailsDto?> CreateAsync(ConfigurationCreateRequest createRequest);
-	Task<ConfigurationDetailsDto> UpdateAsync(long id, ConfigurationUpdateRequest updateRequest);
-    Task DeleteAsync(long id);
-    Task ApplyConfiguration(long id);
-}
-
 public class ConfigurationService(
-		ILogger<ConfigurationService> logger,
-		IStreamManager streamManager,
-		IConfigurationProducer configurationProducer,
-		IUnitOfWork unitOfWork) : IConfigurationService
+    ILogger<ConfigurationService> logger,
+    IStreamManager streamManager,
+    IConfigurationProducer configurationProducer,
+    IUnitOfWork unitOfWork) : IConfigurationService
 {
 	public async Task<IEnumerable<ConfigurationDto>> GetAllAsync()
 	{

@@ -1,17 +1,9 @@
 using Viewer.Server.Application.Dtos;
 using Viewer.Server.Application.Dtos.Process;
 using Viewer.Server.Application.Interfaces.Repositories;
+using Viewer.Server.Application.Interfaces.Services;
 
 namespace Viewer.Server.Application.Services;
-
-public interface IProcessService
-{
-	Task<IEnumerable<ProcessDto>> GetAllAsync();
-	Task<ProcessDto?> GetByIdAsync(long id);
-	Task<ProcessDto?> CreateAsync(ProcessCreateRequest createRequest);
-    Task<ProcessDto?> UpdateAsync(long id, ProcessUpdateRequest updateRequest);
-    Task DeleteAsync(long id);
-}
 
 public class ProcessService(IUnitOfWork unitOfWork) : IProcessService
 {

@@ -1,6 +1,6 @@
 using Communication.AgentToServer;
 
-namespace Viewer.Server.Infrastructure.Grpc.Mappers;
+namespace Viewer.Server.Infrastructure.Grpc;
 
 public static class FromGrpcObjectMapper
 {

@@ -1,13 +1,9 @@
 using Viewer.Server.Application.Dtos;
 using Viewer.Server.Application.Dtos.Heartbeat;
 using Viewer.Server.Application.Interfaces.Repositories;
+using Viewer.Server.Application.Interfaces.Services;
 
 namespace Viewer.Server.Application.Services;
-
-public interface IHeartbeatService
-{
-	Task<IEnumerable<HeartbeatDto>> GetAllAsync();
-}
 
 public class HeartbeatService(IHeartbeatRepository heartbeatRepository) : IHeartbeatService
 {

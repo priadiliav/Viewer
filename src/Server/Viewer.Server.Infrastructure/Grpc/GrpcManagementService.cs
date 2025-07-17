@@ -1,9 +1,9 @@
 using Communication.Management;
 using Grpc.Core;
+using Viewer.Server.Application.Interfaces.Services;
 using Viewer.Server.Application.Services;
-using Viewer.Server.Infrastructure.Grpc.Mappers;
 
-namespace Viewer.Server.Infrastructure.Grpc.Services;
+namespace Viewer.Server.Infrastructure.Grpc;
 
 public class GrpcManagementService(IAgentService agentService) : Communication.Management.ManagementService.ManagementServiceBase
 {

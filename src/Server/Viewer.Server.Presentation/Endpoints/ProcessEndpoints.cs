@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Viewer.Server.Application.Dtos.Process;
+using Viewer.Server.Application.Interfaces.Services;
 using Viewer.Server.Application.Services;
 
 namespace Viewer.Server.Presentation.Endpoints;
 
 public static class ProcessEndpoints
 {
-	
 	private static async Task<IEnumerable<ProcessDto>> GetProcesses(IProcessService processService)
 	{
 		var processes = await processService.GetAllAsync();

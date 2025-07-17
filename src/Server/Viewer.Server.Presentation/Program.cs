@@ -1,14 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Viewer.Server.Application.Handlers;
 using Viewer.Server.Application.Interfaces.Handlers;
+using Viewer.Server.Application.Interfaces.Producers;
 using Viewer.Server.Application.Interfaces.Repositories;
 using Viewer.Server.Application.Interfaces.Services;
+using Viewer.Server.Application.Producers;
 using Viewer.Server.Application.Services;
 using Viewer.Server.Infrastructure.Configs;
 using Viewer.Server.Infrastructure.Grpc;
-using Viewer.Server.Infrastructure.Grpc.Handlers;
-using Viewer.Server.Infrastructure.Grpc.Producers;
-using Viewer.Server.Infrastructure.Grpc.Services;
 using Viewer.Server.Infrastructure.Repositories;
 using Viewer.Server.Presentation.Endpoints;
 
@@ -41,9 +40,11 @@ builder.Services.AddScoped<IProcessRepository, ProcessRepository>();
 builder.Services.AddScoped<IAgentRepository, AgentRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddScoped<IConfigurationProducer, GrpcConfigurationProducer>();
+builder.Services.AddScoped<IConfigurationProducer, ConfigurationProducer>();
 builder.Services.AddScoped<IHeartbeatHandler, HeartbeatHandler>();
-builder.Services.AddScoped<IMessageHandlerFactory, GrpcMessageHandlerFactory>();
+
+builder.Services.AddScoped<IHandlerResolver, GrpcHandlerResolver>();
+builder.Services.AddScoped<IMessageProducer, GrpcMessageProducer>();
 
 builder.Services.AddSingleton<IStreamManager, GrpcStreamManager>();
 
