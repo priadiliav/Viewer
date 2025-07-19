@@ -7,9 +7,7 @@ using Viewer.Agent.Domain.Models;
 
 namespace Viewer.Agent.Infrastructure.Repositories;
 
-public class JsonConfigurationRepository(
-		ILogger<JsonConfigurationRepository> logger, 
-		IOptions<RepositoryConfig> repoConfig) : IConfigurationRepository
+public class JsonConfigurationRepository(ILogger<JsonConfigurationRepository> logger, IOptions<RepositoryConfig> repoConfig) : IConfigurationRepository
 {
 	private readonly string _filePath = repoConfig.Value.GetFullPath();
 	private readonly object _lock = new();
@@ -46,7 +44,7 @@ public class JsonConfigurationRepository(
 			{
 				var json = JsonSerializer.Serialize(configuration, new JsonSerializerOptions
 				{
-						WriteIndented = true
+					WriteIndented = true
 				});
 
 				Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);

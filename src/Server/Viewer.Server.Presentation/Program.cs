@@ -13,6 +13,10 @@ using Viewer.Server.Presentation.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
+builder.AddNpgsqlDbContext<AppDbContext>("ViewerDb");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -24,8 +28,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 builder.Services.AddGrpc();
-builder.Services.AddDbContext<AppDbContext>(options => 
-		options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<AppDbContext>(options => 
+//		options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
@@ -53,6 +57,8 @@ builder.Services.AddSingleton<IGrpcStreamManager>(sp => sp.GetRequiredService<Gr
 builder.Services.AddSingleton<IStreamManager>(sp => sp.GetRequiredService<GrpcStreamManager>());
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {

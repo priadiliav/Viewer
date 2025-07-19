@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35828.75 d17.13
+VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{DFB61515-81CD-42B4-93FB-36484D6C89A7}"
 EndProject
@@ -17,11 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Presentation", "src\Server\Viewer.Server.Presentation\Viewer.Server.Presentation.csproj", "{E019E385-F45B-4118-AE1F-6F67A4B4B448}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{3F2908F1-9E9A-4EB5-997B-2CABEEF52ADC}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yaml = docker-compose.yaml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Application", "src\Server\Viewer.Server.Application\Viewer.Server.Application.csproj", "{BA9C84E5-25F3-4E6B-8B3E-A881ADFA10E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Agent.Domain", "src\Agent\Viewer.Agent.Domain\Viewer.Agent.Domain.csproj", "{BC2D630C-8E1D-4E39-9E93-E1AAF19121FC}"
@@ -31,6 +26,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Agent.Infrastructure", "src\Agent\Viewer.Agent.Infrastructure\Viewer.Agent.Infrastructure.csproj", "{D9E62C3B-6501-4D16-AEB2-558D538A9DD7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Agent.Presentation", "src\Agent\Viewer.Agent.Presentation\Viewer.Agent.Presentation.csproj", "{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Aspire.AppHost", "src\Server\Viewer.Server.Aspire.AppHost\Viewer.Server.Aspire.AppHost.csproj", "{92465AAD-C110-443A-A62A-F5CCF231809A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Aspire.ServiceDefaults", "src\Server\Viewer.Server.Aspire.ServiceDefaults\Viewer.Server.Aspire.ServiceDefaults.csproj", "{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +73,14 @@ Global
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92465AAD-C110-443A-A62A-F5CCF231809A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92465AAD-C110-443A-A62A-F5CCF231809A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92465AAD-C110-443A-A62A-F5CCF231809A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92465AAD-C110-443A-A62A-F5CCF231809A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,11 +90,15 @@ Global
 		{36111370-87AB-4940-80FD-EA31E0EB17BE} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
 		{FDD2BDF1-3CE7-4C9D-B8C4-92F6594DB4CE} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
 		{E019E385-F45B-4118-AE1F-6F67A4B4B448} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
-		{3F2908F1-9E9A-4EB5-997B-2CABEEF52ADC} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
 		{BA9C84E5-25F3-4E6B-8B3E-A881ADFA10E0} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
 		{BC2D630C-8E1D-4E39-9E93-E1AAF19121FC} = {F72E57ED-5913-4DFF-A287-032E8302DE98}
 		{D23C1352-35F6-447F-BD36-5E11846B2466} = {F72E57ED-5913-4DFF-A287-032E8302DE98}
 		{D9E62C3B-6501-4D16-AEB2-558D538A9DD7} = {F72E57ED-5913-4DFF-A287-032E8302DE98}
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F} = {F72E57ED-5913-4DFF-A287-032E8302DE98}
+		{92465AAD-C110-443A-A62A-F5CCF231809A} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
+		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {69D09DBC-845D-47AA-8130-37928C12FCEC}
 	EndGlobalSection
 EndGlobal
