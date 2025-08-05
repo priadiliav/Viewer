@@ -1,0 +1,10 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ../../Viewer.Server.Presentation/Dockerfile
+
+  ui:
+    build:
+      context: .
+      dockerfile: ../../ui/Dockerfile
