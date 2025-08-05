@@ -1,1 +1,1 @@
-Agent -> Server communication using gRPC
+Agent -> Server communication using gRPC streaming to send metrics
