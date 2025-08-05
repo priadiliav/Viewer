@@ -1,0 +1,31 @@
+parameters:
+  viewer-server:
+    port_http: 8080
+    port_https: 8081
+    viewer_server_image: "vitaliipriadilia/viewer-server:latest"
+secrets:
+  database:
+    POSTGRES_PASSWORD: "your_secure_password_here"
+config:
+  database:
+    POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
+    POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+    POSTGRES_USER: "postgres"
+  viewer-server:
+    ASPNETCORE_URLS: "https://+:8081"
+    ASPNETCORE_Kestrel__Certificates__Default__Path: "/https-certs/https-cert.pfx"
+    ASPNETCORE_Kestrel__Certificates__Default__Password: "changeit"
+    OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+    OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+    OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+    ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+
+volumes:
+  - name: https-certs
+    secret:
+      secretName: https-cert-secret
+   
+volumeMounts:
+  - name: https-certs
+    mountPath: /https-certs
+    readOnly: true

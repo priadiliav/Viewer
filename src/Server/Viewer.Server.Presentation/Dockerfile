@@ -10,7 +10,7 @@ WORKDIR /src
 
 # Copy csproj files separately for restore
 COPY ["src/Server/Viewer.Server.Presentation/Viewer.Server.Presentation.csproj", "src/Server/Viewer.Server.Presentation/"]
-COPY ["src/Viewer.Shared/Viewer.Shared.csproj", "src/Viewer.Shared/"]
+COPY ["src/Common/Viewer.Shared/Viewer.Shared.csproj", "src/Common/Viewer.Shared/"]
 COPY ["src/Server/Viewer.Server.Domain/Viewer.Server.Domain.csproj", "src/Server/Viewer.Server.Domain/"]
 COPY ["src/Server/Viewer.Server.Infrastructure/Viewer.Server.Infrastructure.csproj", "src/Server/Viewer.Server.Infrastructure/"]
 COPY ["src/Server/Viewer.Server.Application/Viewer.Server.Application.csproj", "src/Server/Viewer.Server.Application/"]

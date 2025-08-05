@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: viewer-server-config
+  labels:
+    app: aspire
+    component: viewer-server
+data:
+  ASPNETCORE_URLS: {{ index .Values.config "viewer-server" "ASPNETCORE_URLS" | quote }}
+  OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: {{ index .Values.config "viewer-server" "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES" | quote }}
+  OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: {{ index .Values.config "viewer-server" "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES" | quote }}
+  OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: {{ index .Values.config "viewer-server" "OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY" | quote }}
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED: {{ index .Values.config "viewer-server" "ASPNETCORE_FORWARDEDHEADERS_ENABLED" | quote }}
+  HTTP_PORTS: {{ index .Values.config "viewer-server" "HTTP_PORTS" | quote }}
+  ASPNETCORE_Kestrel__Certificates__Default__Path: {{ index .Values.config "viewer-server" "ASPNETCORE_Kestrel__Certificates__Default__Path" | quote }}

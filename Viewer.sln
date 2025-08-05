@@ -27,10 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Agent.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Agent.Presentation", "src\Agent\Viewer.Agent.Presentation\Viewer.Agent.Presentation.csproj", "{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Aspire.AppHost", "src\Server\Viewer.Server.Aspire.AppHost\Viewer.Server.Aspire.AppHost.csproj", "{92465AAD-C110-443A-A62A-F5CCF231809A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viewer.Server.Aspire.ServiceDefaults", "src\Server\Viewer.Server.Aspire.ServiceDefaults\Viewer.Server.Aspire.ServiceDefaults.csproj", "{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,14 +69,6 @@ Global
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92465AAD-C110-443A-A62A-F5CCF231809A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92465AAD-C110-443A-A62A-F5CCF231809A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92465AAD-C110-443A-A62A-F5CCF231809A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92465AAD-C110-443A-A62A-F5CCF231809A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,8 +83,6 @@ Global
 		{D23C1352-35F6-447F-BD36-5E11846B2466} = {F72E57ED-5913-4DFF-A287-032E8302DE98}
 		{D9E62C3B-6501-4D16-AEB2-558D538A9DD7} = {F72E57ED-5913-4DFF-A287-032E8302DE98}
 		{0961DE0D-BECC-4AD4-B84E-99BC2997D25F} = {F72E57ED-5913-4DFF-A287-032E8302DE98}
-		{92465AAD-C110-443A-A62A-F5CCF231809A} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
-		{592EB3F5-6EC6-D3AA-15DA-A079A913CBDA} = {DFB61515-81CD-42B4-93FB-36484D6C89A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {69D09DBC-845D-47AA-8130-37928C12FCEC}

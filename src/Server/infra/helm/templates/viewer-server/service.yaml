@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: viewer-server-service
+spec:
+  type: ClusterIP
+  selector:
+    app: aspire
+    component: viewer-server
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ index .Values.parameters "viewer-server" "port_http" }}
+      targetPort: {{ index .Values.parameters "viewer-server" "port_http" }}
+    - name: https
+      protocol: TCP
+      port: {{ index .Values.parameters "viewer-server" "port_https" }}
+      targetPort: {{ index .Values.parameters "viewer-server" "port_https" }}
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: viewer-server-gateway
+  namespace: default
+spec:
+  gatewayClassName: contour
+  listeners:
+    - name: https
+      protocol: TLS
+      port: 443
+      hostname: "my.domain.com" 
+      tls:
+        mode: Passthrough
+      allowedRoutes:
+        namespaces:
+          from: All          
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: TCPRoute
+metadata:
+  name: viewer-server-tcp-route
+  namespace: default
+spec:
+  parentRefs:
+    - name: viewer-server-gateway
+      namespace: default
+  rules:
+    - backendRefs:
+        - name: viewer-server-service
+          port: {{ index .Values.parameters "viewer-server" "port_https" }}

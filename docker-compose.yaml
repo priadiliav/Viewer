@@ -1,10 +1,25 @@
 services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ViewerDB
+    ports:
+    - "5432:5432"
+    volumes:
+    - db_data:/var/lib/postgresql/data
+  
   server:
     build:
       context: .
-      dockerfile: ../../Viewer.Server.Presentation/Dockerfile
+      dockerfile: src/Server/Viewer.Server.Presentation/Dockerfile
 
   ui:
     build:
       context: .
-      dockerfile: ../../ui/Dockerfile
+      dockerfile: src/Server/ui/Dockerfile
+      
+volumes:
+  db_data:
+    driver: local

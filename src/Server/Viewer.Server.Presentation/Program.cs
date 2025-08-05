@@ -13,23 +13,19 @@ using Viewer.Server.Presentation.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-
-builder.AddNpgsqlDbContext<AppDbContext>("ViewerDb");
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
-        corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+    corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 });
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 builder.Services.AddGrpc();
-//builder.Services.AddDbContext<AppDbContext>(options => 
-//		options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(options => 
+	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
@@ -58,7 +54,12 @@ builder.Services.AddSingleton<IStreamManager>(sp => sp.GetRequiredService<GrpcSt
 
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
+// Migrate the database before starting the application
+using (var scope = app.Services.CreateScope())
+{
+	var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+	db.Database.Migrate(); 
+}
 
 if (app.Environment.IsDevelopment())
 {
